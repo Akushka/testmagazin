@@ -1,0 +1,15 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+{% block content %}	
+
+{{ArrProducts}}
+
+{% for Product in arrProducts %}
+	<div class="basket">
+	  <a>	 {{Product}} - {{Product.pk}}</a>
+	</div>
+{% endfor %}
+
+
+{% endblock content %} 

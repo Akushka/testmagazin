@@ -1,0 +1,46 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+{% block content %}	
+
+<br> 	
+
+<div class="basket">
+{% for Product in arrProducts %}
+   <!-- {{Product.articleTitle}} -  {{Product.price}} грн.    -->
+    <div  class="articleDateAutor">  
+	       <a>{{Product.category}}</a>
+	  </div> 
+	   
+    <form	method="post">
+		  {% csrf_token %}
+		    
+		    <div  class="delzakaz">  
+		      {{Product.articleTitle}} -  {{Product.price}} грн.   <a href="{% url 'InBasket' pk_bask=pk_bask pk_del=Product.pk %}">  Удалить из заказа </a> 
+		    </div> 
+		</form>
+    
+	   
+
+{% endfor %}
+</div>
+<br> 
+<br>
+ <div class="basket">
+  Сумма - {{sum}} грн.
+  </div>
+<br> 	
+	
+<div class="divZakaz">
+	<form action="/siteVisit/order/{{pk_bask}}/" method="post">
+	{% csrf_token %}
+	<p class="rightstrButton"> 
+		<br> 
+    <a>   <input type = "submit" class="button" value="Заказать!"> </a>
+	</p> 
+</form>
+
+</div>
+
+{% endblock content %} 
+

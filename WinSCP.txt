@@ -1,0 +1,11 @@
+myvenv\Scripts\activate
+python manage.py runserver
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+WinSCP
+по ssh 91.123.150.109 порт 47 (это виртуалка)
+пользователь bdsmusic
+пароль визде 1q2w3e4r (лучше сменить)

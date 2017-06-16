@@ -1,0 +1,37 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+
+
+{% block content %}	
+   
+
+  <h1> Add new article </h1> 
+  
+  <form method="POST">
+  	{% csrf_token %}
+    
+    <p class="leftstr">  
+     {{ form.as_p }}
+    </p>    
+
+    {% for image in arrImage %}
+	    <img src= {{image.imagePath.url}} width="70" height="70">
+	  {% endfor %}
+	
+    {{ formAddImage.as_p }}
+	  <button type="submit" class="save btn btn-default">Add picture and save all</button>
+	  
+	  <a>{{article.id}}</a>
+	
+	<br>
+	<br>
+	<br>
+
+	<br>
+	<br>
+	<h4><a  href="{% url 'article_list' pk=0 %}"></a> Back </h4>
+  </form>
+
+{% endblock content %}  
+

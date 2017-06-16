@@ -1,0 +1,23 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+
+
+{% block content %}	
+   
+    
+  <h4> Обратная связь:</h4> 
+  
+  <form method="POST" class="feedBack">
+  	{% csrf_token %}
+<!--    {{ form.as_p }}-->
+      <h5> E-Mail </h5>
+      {{form.email}}
+      <h5>Текст </h5>
+      {{form.textFeedback}}
+    <button type="submit" class="save btn btn-default">Отправить</button>
+  </form>
+  
+
+{% endblock content %}  
+</html>

@@ -1,0 +1,63 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+{% block content %}	
+ 
+ 
+
+<div>   
+<form method="POST" class="article-form">
+	{% csrf_token %}
+<!--	<h5> <a> {{ form.author }} </a></h5>-->
+	<h5> <a> Title </a></h5>
+	<h5> <a> {{ form.articleTitle }} </a></h5>
+	<h5> <a> Text </a></h5>
+	<h5> <a> {{ form.articleText }}</a></h5>
+	<h5> <a> Category </a></h5>
+	<h5> <a> {{ form.category }}</a></h5>
+	<h5> <a> Price </a></h5>
+	<h5> <a> {{ form.price }}</a></h5>
+	<h5> <a> {{ form.prevRecl }} Top Reclama </a></h5>
+	<h5> <a> {{ form.articleTextPreview }} Рекламный текст </a></h5>
+	
+		
+	<h5> <a> {{ form.visible }} Не показывать</a></h5>
+	
+	<button type="submit" class="save btn btn-default">Save</button>
+
+</form>
+</div>
+
+<br>
+<h4><a> Галерея </a></h4>
+<h5> 
+	{% for image in arrImage %}
+	<figure class="sign">
+	 <img src= {{image.imagePath.url}} width="70" height="70">
+		   <form action="/siteVisit/delPicture/{{article.pk}}/{{image.pk}}/"	method="post" >
+		   	  {% csrf_token %}  
+			    <figcaption><a><input  type = "image" alt="Удалить" class="delComment"  ></a></figcaption>
+	     </form>
+	
+   </figure>
+	{% endfor %}
+</h5>
+
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+
+<h4> <a>
+ 
+ <form class="post-form" method="post" enctype="multipart/form-data">
+ 	{% csrf_token %}
+  {{ formAddImage.as_p }}
+	<button type="submit" class="save btn btn-default">Add picture</button>
+ </form>	
+</a></h4>
+<h4><a  href="{% url 'article_detail_admin' pk=article.pk%}"> Back to article</h4>
+{% endblock content %}

@@ -1,0 +1,155 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <title>Hi-Tech Mobile</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Titillium Web&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Muli&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron&subset=latin,cyrillic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/article.css' %}">
+    <meta charset="utf-8">
+    
+  </head>
+  
+       
+<style>
+body 
+{
+  background: white url('/media/vector-fon_6.jpg'); 
+  color: #0c0c0c;
+}
+</style>
+	
+<script type="text/javascript">
+function reloadPage()
+{
+  window.location.reload()
+}
+</script>
+  
+
+	 	
+<div class="PageTitle"> 
+	    
+    <a href="{% url 'article_list2'  %}"> Hi-Tech Mobile </a>
+
+
+</div>  
+
+
+<!--	
+<form action="/siteVisit/InBasket/{{BaskAdd.pk}}/" method="post">
+	{% csrf_token %}		
+	<div  class="userVal2">
+    <p>  Корзина  </p> 
+ 
+    <br>
+  	<p>  <input  type = "image" <img src= "/media/basket.jpg" height="50" alt="" title="Корзина">  </p>
+		  <span class="userVal3">{{countProduct}} </span>
+	  	
+  </div>
+</form>	
+-->	
+
+
+
+
+<br>
+ <!--
+<p class="userVal2">  <a class="userVal">  Корзина <a href="/0"></a> <br>   <a href="/0"> <img src= "/media/basket.jpg" height="70" title="Корзина"></a>	</a>	 </p>  <br>    
+  -->
+
+ 
+
+    
+
+    
+<body>	
+
+
+
+<div class="div1">
+{% for Categorie in Categories %}
+ 	 <a class="div_text"> <a href="{% url 'article_list' pk=Categorie.Id_Categories %}">  {{Categorie}}          </a></a><br> 
+{% endfor %}
+ <!--  <input type="button" value="reload" onclick="reloadPage()" />  -->   
+  <br> 
+  <br> 
+  <br>       
+
+
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+ 
+ 
+<hr> 
+
+<form action="/siteVisit/autentificationUser/"	method="post" >
+	{% csrf_token %}
+	<div class="leftstr">   
+	<p> 
+		<a>  Личный кабинет  </a>
+	  <a>  {{ userForm.userName }}  </a>
+	  <a>  {{ userForm.password }}  </a>
+	  <a><input type = "submit" span  span class="buttonLog" value="Войти"> </a>
+	</p> 
+	</div> 
+</form>
+<br> <br><br> <br> 
+
+<p class = "rightstrPass">  <a href="{% url 'feedback'%}">  Написать письмо  </a></p> 
+	
+</div>
+
+
+
+<div class="div3">
+	
+	<div class="div_fon">
+   <span class="centerstrBas">  Корзина  </span>
+	 <hr> 
+	</div> 
+	
+	{% for Product in arrProducts %}
+	  <span class="basketScreen">
+	    -  {{Product}} 
+	  </span>
+	  <br>
+  {% endfor %}
+<br>
+
+<form action="/siteVisit/InBasket/{{BaskAdd.pk}}/0/" method="post">
+	{% csrf_token %}
+	<p class="rightstrButton"> 
+    <a>   <input type = "submit" class="button" value="Оформить заказ"> </a>
+	</p> 
+</form>
+
+</div>
+
+
+
+<div class="div2">
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+
+
+
+</body>
+
+
+
+</html>

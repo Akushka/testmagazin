@@ -1,0 +1,431 @@
+@charset "utf-8";
+.PageAll body{
+	      background: #c7b39b;
+        color: #fff;
+}
+.delComment a{
+	     background: #c7b39b;
+       color: #fff;
+       padding-left: 95px;
+}
+
+
+.PageTitle h1, .PageTitle a{
+/*	float: right;
+	position: fixed;  Фиксированное положение */
+	/*right: 0px;  Расстояние от правого края окна браузера 
+	left: 0px;
+	top: 0%; /* Расстояние сверху */*/
+	/*border: 1px solid #333;  Параметры рамки 
+	border-bottom: 1px solid black;*/
+	
+	background-size: 100%; /* Современные браузеры */
+	padding: 8px;
+	margin: 7px 7px 7px 0; 
+	font-family: 'Orbitron';
+	font-size: 50pt;
+  color: #73EE3E;
+  padding-left: 15px;
+  text-decoration: inherit; /* Убирает подчеркивание для ссылок */
+}
+
+.userVal p, .userVal a{
+	position: fixed; /* Фиксированное положение */
+	right: 10px; /* Расстояние от правого края окна браузера */
+	
+	background-color: #F3FE2C /*#227f96*/;
+/*	padding: 10px;*/
+	margin-top: 10;
+	 /*font-family: 'Orbitron';*/
+	font-size: 10pt;
+  color: #939A01;
+  padding-left: 15px;
+  text-decoration: inherit; /* Убирает подчеркивание для ссылок */
+}
+.buttonLog{
+ left: 10px;
+ height: 22;
+ font-size: 13;
+}
+
+.userVal2 p  {
+	/*position: fixed;  Фиксированное положение */
+	left: 10%;/*  Расстояние от правого края окна браузера */
+	margin-top: -65; 
+}
+.userVal3  {
+	position: fixed;/*  Фиксированное положение */
+	right: 10px; /* Расстояние от правого края окна браузера */
+	margin-top: 23; 
+	font-size: 23;
+}
+
+
+
+/*Выпавниваем картинки при редактировании в строку*/
+.sign {
+ float: left; /* Выравнивание по левому краю */
+ border: 1px solid #333; /* Параметры рамки */
+ padding: 7px; /* Поля внутри блока */
+ margin: 10px 0px 5px 15px; /* Отступы вокруг */
+ background: #f0f0f0; /* Цвет фона */ 
+}
+.sign figcaption {
+ margin: 0 auto 5px; /* Отступы вокруг абзаца */
+}
+
+  
+.rightstrPass {
+    text-align: right; /* Выравнивание по правому краю */ 
+    padding-right: 5px;
+    float: right; /* Обтекание справа */ 
+    font-size: 10pt;
+}
+
+.feedBack {
+	     font-family: 'Muli';
+       color: #8c4707 ;
+       padding-left: 15;
+       padding-right: 15;
+       font-size: 10pt;
+}   
+
+.leftstr, .rightstr, .centerstr {
+    float: left; /* Обтекание справа */ 
+  /*   position: fixed; Фиксированное положение 
+    left: 0; 
+    bottom: 0;  Левый нижний угол */
+    width: 33%; /* Ширина текстового блока */ 
+    font-size: 10pt;
+    /*font-family: 'Titillium Web';*/
+    color: #000000;
+    padding-left: 15px;
+    
+    vertical-align:bottom
+    position:absolute;
+    bottom:0px;
+    
+}
+.rightstr {
+    text-align: right; /* Выравнивание по правому краю */ 
+    padding-right: 15px;
+    float: right; /* Обтекание справа */ 
+}
+.centerstr {
+    text-align: center; /* Выравнивание по центру */ 
+    padding-right: 15px;
+}
+
+.centerstrBas {
+    /*text-align: center; Выравнивание по правому краю  */
+    
+    padding-left: 32%;
+    margin-top: 23; 
+    color: #6A6A6A;
+    font-size: 20pt;
+    /*border-bottom: 1px solid white ;*/
+}  
+.basketScreen {
+	     font-family: 'Muli';
+       color: #8c4707 ;
+       padding-left: 5;
+       font-size: 10pt;
+}
+
+.basket {
+	     font-family: 'Lobster&subset';
+       color: #6A6A6A ;
+       padding-left: 15;
+       font-size: 20pt;
+}
+.rightstrButton {
+	 /* position: fixed;
+    float: right;*/
+    padding-left: 3%;
+    font-size: 10pt;
+	  /*margin-top: 120; */
+}  
+.prevImage {
+	  /*position: fixed;*/
+	  padding-left: 3%;
+	  padding-right: 3%;
+}
+
+.rightButtonFind {
+   /* text-align:  center;
+    padding-right: 10px;*/
+    margin-top: -325; 
+    font-size: 10pt;
+	  padding-left: 40%;
+}  
+
+.articleTitle a{
+       margin-top: 0;
+	     font-family: 'Titillium Web';
+       font-size: 30pt;
+       color: #3634d1;
+       padding-left: 15px;
+
+}
+.articleText a, .articleText h4{
+	     font-family: 'Muli';
+       color: #8c4707 ;
+       padding-left: 65px;
+       padding-right: 65px;
+       text-decoration: none; /* Убирает подчеркивание для ссылок */
+}
+.articleDateAutor a{
+	     font-family: 'Titillium Web';
+       color: #8c4707 ;
+       padding-left: 5px;
+       font-size: 10pt;
+       text-decoration: none; /* Убирает подчеркивание для ссылок */
+}
+
+.delzakaz a{
+	     font-family: 'Titillium Web';
+       color: #FF0000 ;
+      /*  padding-left: 5px;*/
+       font-size: 10pt;
+      /* text-decoration: none;  Убирает подчеркивание для ссылок */
+}
+
+.table {
+    width: 100%; /* Ширина таблицы в процентах */
+   }
+   .col1 {
+    width: 100px; /* Ширина ячейки */
+   }
+
+
+.articleCommentAutor p{
+	     font-family: 'Muli';
+       color: #8c4707 ;
+       padding-left: 30px;
+}
+.articleCommentText p{
+	     font-family: 'Muli';
+       color: #8c4707 ;
+       padding-left: 50px;
+}
+.deleteComment p{
+	     background: #c7b39b;
+       color: #fff;
+       font-size: 10pt;
+       padding-left: 1000px;
+}
+.articleAdd a{
+       background: #808080;
+       color: #fff;
+       float:right;
+       margin-top: -30;
+       padding-right: -5px;
+}
+.findEdit a{
+       height: 100px;
+       padding-left: 10px;
+       margin-top: 50;
+}
+.temp a{
+       margin-top: 25;
+}
+.image.first,.image.second {
+border:2px solid transparent;
+margin:0;
+padding:0;
+}
+
+.image.first {
+opacity:1px;
+display:block;
+position:100px;
+z-index:100;
+transition-duration:0.96s;
+-webkit-transition-duration:0.96s;
+-moz-transition-duration:0.96s;
+-o-transition-duration:0.96s;
+-ms-transition-duration:0.96s;
+}
+
+.image.first:hover {
+opacity:0.00;
+}
+
+div.ImgField {
+display:inline-block;
+background-position:center center;
+background-repeat:no-repeat;
+margin:0;
+padding:0;
+}
+
+html_ {
+    margin:auto;
+    padding:0;
+    height:100%;
+    max-width:80em;
+    background-color:#fff;
+    color:inherit;
+    }
+body_ {
+    display:table;
+    overflow-x:hidden;
+    margin:0 0 0 65%;
+    padding:0;
+    width:100%;
+    height:100%;
+    background-color:#f5f5f5;
+    box-shadow:0 .1em 1em #e5e5e5 inset;
+    color:inherit;
+    font:90%/1.45 'PT Serif', Georgia, 'Times New Roman', Times, serif;
+    }
+
+#middle {
+    margin:0 0 0 -65%;
+    padding:0;
+    width:100%;
+    height:100%;
+    }
+
+    #content {
+        float:left;
+        display:inline-block;
+        margin:0;
+        padding:2%;
+        width:61%;
+        }
+
+    #sidebar {
+        float:right;
+        display:inline-block;
+        margin:0;
+        padding:2%;
+        width:31%;
+        }
+        
+
+.menuPage a, .menuPage p , .menuPage br {
+/*position: fixed; 
+margin-left: 0px;
+top: 0;
+left: 0;
+z-index: 999;
+width: 271px;
+min-height: 100%;  высота блока всегда 100%  
+height: 1000px;*/
+}
+        
+.div1{    
+    width: 20%;
+  /*  height: 100%;
+    min-height: 150px;
+    background: #ccc;*/
+    margin-left: 0.3%;
+    float: left;
+    font-size: 15pt;
+    color: #f2ee1d;
+    font-family: 'Titillium Web';
+    border-top: 1px solid white;
+    border-right: 1px solid red;
+    border-left: 1px solid white;
+    border-bottom: 1px solid red;
+}
+.div_text{    
+    margin-left:5%;
+}
+
+.div_prev{    
+    width: 65%;
+    height: 35%;
+    left: 10;
+/*    min-height: 150px;
+    background: #c00;   */
+    margin-left: 20%;
+}   
+
+.div2{    
+    width: 65%;
+    height: 100%;
+    left: 10;
+/*    min-height: 150px;
+    background: #c00;   */
+    margin-left: 20%;
+    margin-top: -20%;
+}
+
+.divZakaz{ 
+    margin-left: 1%;
+    width: 90%;
+    border-top: 2px solid red;
+}
+
+
+.div3{ 
+	  /* position: fixed;*/    
+	 height: 50%;
+    width: 15%;
+    /*margin-right: 0.3%;*/
+    margin-top: -3%;
+    margin-left: 84.7%;
+    min-height: 300px;
+    max-height: 300px;
+   /* background: #73EE3E;
+    float: right;*/
+    font-size: 35pt;
+    
+    background: rgba(243, 243, 243, 0); /* Цвет фона и полупрозрачность*/
+  	
+    font-family: 'Titillium Web';
+    border-top: 1px solid red;
+    border-right: 1px solid red;
+    border-left: 1px solid red;
+    border-bottom: 1px solid red;
+}
+
+.div_fon{ 
+    opacity: 1;  /*полупрозрачный фон*/
+}
+
+.div_image{ 
+	  width: 10%; 
+	  
+    float: left;
+    margin-left: 1%;
+}
+.footer{
+    clear: left;
+   /* background: #000;
+    min-height: 50px;*/
+}        
+
+
+.catalog-list-04 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	padding-left: 15px;
+}
+.catalog-list-04 li {
+	display: inline-block;
+	width: 200;
+	min-width: 150;
+	max-width: 300px;
+}
+.catalog-list-04 li img {
+	width: 95%;
+	padding: 0;
+}
+
+
+
+
+.catalog-list-test a {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.catalog-list-test a img {
+	width: 20%;
+	
+}

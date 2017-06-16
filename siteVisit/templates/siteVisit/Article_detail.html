@@ -1,0 +1,122 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+
+{% block content %}	
+
+<!--
+<p class="rightstr articleAdd"> 
+  <a><a  href="{% url 'article_edit' pk=article.id %}"> Edit article</a>
+</p> 
+-->
+
+
+<div  class="articleTitle"> 
+		<div class="articleDateAutor"><h1> <a>{{ article.category }}  </a></h1></div>
+	 	<h1> <a>{{ article.articleTitle }}
+	 		<div class="articleDateAutor">  <a>{{ article.author }},   {{ article.created_date }} </a>
+ 		</div> </a></h1>
+</div>
+
+
+<!-- добавляем в корзину товар  -->
+        <form action="/siteVisit/addInBasket/{{article.pk}}/{{BaskAdd.pk}}/1/" method="post">
+        {% csrf_token %}		   
+       	   <div class="catalog-list-test"> 
+       	   	<a> <input  type = "image" <img src= "/media/basket_2.jpg" title="Добавить в корзину" width="64" height="66"></a>
+       	   	<h6> <font color="red"> Добавить в корзину </font> </h6> 
+       	    <h3> <font color="green"> Цена -  {{ article.price }} грн. </font></h3> 
+       	   </div> 
+       </form>	   
+<!-- добавляем в корзину товар  -->				
+
+
+
+<script type="text/javascript">
+var all_images = [];
+  {% for image in images %}
+		 all_images.push('{{image.imagePath.url}}')
+  {% endfor %}
+
+var ImgNum = 0;
+var ImgLength = all_images.length - 1;
+
+
+function chgImg(direction) {
+ if (document.images) {
+  ImgNum = ImgNum + direction;
+  if (ImgNum > ImgLength) { ImgNum = 0; }
+  if (ImgNum < 0) { ImgNum = ImgLength; }
+  document.slide_show.src = all_images[ImgNum];
+ }
+}
+
+function chgImg2(imagePaths) {
+ if (document.images) {
+  document.slide_show.src = imagePaths ;
+ }
+}
+</script>
+
+
+
+<div class="div_image">
+   {% for image in images %}
+	   <a> <a href="javascript:chgImg2('{{image.imagePath.url}}')"> <img src= {{image.imagePath.url}} width="70" height="70"></a>
+	 {% endfor %}
+</div>
+
+
+<div><h3></h3>
+ <table border="0">
+  <tr>
+    <td colspan="3"><img src={{ article.imagePathBegin.url }} name="slide_show" width="600" ></td>
+  </tr>
+ </table>
+</div>
+	   
+<div  class="articleText">    
+ 	<h4> <a> {{ article.articleText|linebreaksbr }} </a></h4>
+</div>
+
+<hr>
+
+
+<p> Comment </p>
+
+{% for comment in comments %}
+
+	<div  class="articleCommentAutor">  		   
+	 <p>{{comment.articleAuthor}}:</p>
+	</div> 
+	<div  class="articleCommentText">  		   
+	 <p>"{{comment.articleComment}}"</p>
+	</div> 
+<!--
+	<div>  	 
+		<form action="/siteVisit/delComment/{{comment.id}}/"	method="post" >
+	 	 {% csrf_token %}
+		  <a><input  type = "image" class="delComment"  value="Delete comment"></a>
+	  </form>
+	</div> 
+-->	
+<hr>
+{% endfor %}
+
+<div  class="articleText">   
+<form action="/siteVisit/addcomment/{{article.id}}/"	method="post" >
+	{% csrf_token %}
+	<h5> <a> Autor </a></h5>
+	<h5> <a> {{ form.articleAuthor }} </a></h5>
+	<h5> <a> Text </a></h5>
+	<h5> <a> {{ form.articleComment }}</a></h5>
+	<input type = "submit" class="button" value="Add comment">
+</form>
+</div>
+
+
+
+{% endblock content %}
+		   
+		      
+</html>

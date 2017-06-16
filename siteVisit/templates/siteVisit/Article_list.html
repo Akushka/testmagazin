@@ -1,0 +1,202 @@
+{% extends 'siteVisit/BaseShablon.html' %}
+{% load staticfiles %}
+
+{% block content %}	
+    
+    
+     
+		<form	method="post">
+		  {% csrf_token %}
+			  <p class="rightButtonFind"> 
+			    {{ form.articleFindText }}  <input type = "submit"  value="Найти">
+			  </p>
+		</form>
+	
+		
+<!-- 		
+    {{timeDelta}}	
+		{{request.COOKIES.sessionid}}
+	  	<br>
+		{{BaskAdd.Basket_ip_id}}
+-->
+
+		
+<!-- 
+ <div class="temp">   
+      <a><a class="btn btn-default" href="{% url 'test' %}"> Test </button></a>  
+    </div> 
+ 
+
+<form	method="post" >
+	{% csrf_token %}
+	<p class="leftstr"> 
+	  <a>  {{ form.articleFindText }}  <input type = "submit" class="button" value="Find in article"> </a>
+	</p>  
+</form>
+
+<a  href="{% url 'article_add'%}" style="float:right" > New article  </a>
+-->
+
+
+<br> 
+
+
+
+ 
+
+
+<style>
+   price {
+    background: #D9FFAD; /* Цвет фона под заголовком */
+    color: green; /* Цвет текста */
+    padding: 13px; /* Поля вокруг текста */
+    float: left;
+   }
+</style>
+
+
+
+
+
+<!--   
+Рекламное слайд-шоу по центру!!!
+-->
+
+<script type="text/javascript">
+	
+var all_images = [];
+ {% for image in PrevArray %}
+		 all_images.push('{{image}}')
+  {% endfor %}
+
+
+var ImgNum = 0;
+var ImgLength = all_images.length - 1;
+var delay = 2500;
+var lock = false;
+var run;
+
+function chgImg(direction) {
+ if (document.images) {
+  ImgNum = ImgNum + direction;
+  if (ImgNum > ImgLength) { ImgNum = 0; }
+  if (ImgNum < 0) { ImgNum = ImgLength; }
+  document.slide_show.src = all_images[ImgNum];
+ }
+}
+
+function auto() {
+ if (lock == true) {
+  lock = false;
+  window.clearInterval(run);
+ }
+ else if (lock == false) {
+  lock = true;
+  run = setInterval("chgImg(1)", delay);
+ }
+}
+</script>
+
+<div class="prevImage">
+	<div align="center">
+	 <table border="0">
+	  <tr align="center">
+	     <td colspan="3"><img src={{PrevArray.1}} name="slide_show"  width="100%" height="300"></td>
+	  </tr>
+	  <tr>
+	   <td align="right"><a href="javascript:chgImg(-1)">Предыдущая</a></td>
+	   <td align="center"><a href="javascript:auto()">Старт/Стоп</a></td>
+	   <td align="left"><a href="javascript:chgImg(1)">Следующая</a></td>
+	  </tr>
+	 </table>
+	</div>
+</div>
+
+<script type="text/javascript">
+ auto();
+</script>
+
+
+<!--
+<div class="div_prev">
+{% for article in articles %}
+   {% if article.prevRecl == True %}
+   
+   <div id="slideshow">
+      <ul class="slides">
+        <img src= {{article.imagePathBegin}} height="50%">
+      </ul>
+   </div>
+        -  {{article.articleTitle}} - {{article.articleTextPreview}}  
+   {% endif %}
+   <br>
+{% endfor %}
+</div>
+-->
+
+<!--   
+Рекламные картинки по центру!!!
+-->
+<br> 
+<br> 
+<br> 
+
+
+
+
+
+
+
+
+
+
+
+<ul class="catalog-list-04">
+	
+	{% for article in articles %}
+	
+	  {% if article.visible == False %}
+	
+			  <li>
+					  <div>
+					  	<a href="{% url 'article_detail' pk=article.pk%}">{{ article.articleTitle }} <img src= {{article.imagePathBegin}} height="20%">  </a> 
+					  </div>
+					  
+			<!-- добавляем в корзину товар  -->
+			        <form action="/siteVisit/addInBasket/{{article.pk}}/{{BaskAdd.pk}}/0/" method="post">
+			        {% csrf_token %}		   
+			       	   <div class="catalog-list-test"> 
+			       	     <price> Цена -  {{ article.price }} грн. </price> <a> <input  type = "image" <img src= "/media/basket_2.jpg" title="Добавить в корзину" width="44" height="46"></a>
+			       	   </div> 
+			       </form>	   
+			<!-- добавляем в корзину товар  -->				
+							
+							<div  class="articleDateAutor">  <a>  Отзывов - {{article.countComment}} </a>
+							</div>
+							
+							<div>  	 
+								
+<!-- Удаляем товар (для админской части)					   
+					   <form action="/siteVisit/delArticle/{{article.pk}}/"	method="post" >
+					 	    {% csrf_token %}
+					 	    {{article.Username}}
+					 	    {% if article.Username == anatoliy %}
+						      <a><input  type = "image" class="delComment"  value="Delete Article"></a>
+						    {% endif %}
+				     </form>
+--> 
+
+			    	</div> 
+			    	
+					  </a> 
+				</li>
+	   {% endif %}
+	{% endfor %} 
+</ul>
+  
+			
+
+
+
+	
+{% endblock content %} 
