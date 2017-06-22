@@ -4,23 +4,24 @@
 {% block content %}	
     
     
-     
 		<form	method="post">
 		  {% csrf_token %}
 			  <p class="rightButtonFind"> 
-			    {{ form.articleFindText }}  <input type = "submit"  value="Найти">
+			  	<br>
+          <br>
+			    {{ form.articleFindText }}  <input type = "submit"  value="Найти">  
 			  </p>
 		</form>
 	
-		
-<!-- 		
+	
+<!--	
     {{timeDelta}}	
 		{{request.COOKIES.sessionid}}
 	  	<br>
 		{{BaskAdd.Basket_ip_id}}
--->
 
-		
+{{brouzer}}
+-->		
 <!-- 
  <div class="temp">   
       <a><a class="btn btn-default" href="{% url 'test' %}"> Test </button></a>  
@@ -37,12 +38,7 @@
 <a  href="{% url 'article_add'%}" style="float:right" > New article  </a>
 -->
 
-
-<br> 
-
-
-
- 
+   
 
 
 <style>
@@ -51,9 +47,8 @@
     color: green; /* Цвет текста */
     padding: 13px; /* Поля вокруг текста */
     float: left;
-   }
+}
 </style>
-
 
 
 
@@ -65,8 +60,10 @@
 <script type="text/javascript">
 	
 var all_images = [];
+var all_images_url = [];
  {% for image in PrevArray %}
-		 all_images.push('{{image}}')
+		 all_images.push('{{image.imagePath.url}}')
+		 all_images_url.push('{{image.imageUrlArticle}}')
   {% endfor %}
 
 
@@ -82,9 +79,9 @@ function chgImg(direction) {
   if (ImgNum > ImgLength) { ImgNum = 0; }
   if (ImgNum < 0) { ImgNum = ImgLength; }
   document.slide_show.src = all_images[ImgNum];
+  document.url = all_images_url[ImgNum];
  }
 }
-
 function auto() {
  if (lock == true) {
   lock = false;
@@ -97,16 +94,21 @@ function auto() {
 }
 </script>
 
+<!-- <a href="{% url 'article_detail' pk=PrevArray.1.imageUrlArticle %}">   -->
+
+
+
+
 <div class="prevImage">
 	<div align="center">
 	 <table border="0">
 	  <tr align="center">
-	     <td colspan="3"><img src={{PrevArray.1}} name="slide_show"  width="100%" height="300"></td>
+	     <td colspan="3"> <img src={{PrevArray.1.imagePath.url}} name="slide_show"  width="110%" height="340"></td>
 	  </tr>
 	  <tr>
-	   <td align="right"><a href="javascript:chgImg(-1)">Предыдущая</a></td>
-	   <td align="center"><a href="javascript:auto()">Старт/Стоп</a></td>
-	   <td align="left"><a href="javascript:chgImg(1)">Следующая</a></td>
+	   <td align="right" > <a href="javascript:chgImg(-1)"> Предыдущая </a></td>
+	   <td align="center"> <a href="javascript:auto()"    > Старт/Стоп </a></td>
+	   <td align="left"  > <a href="javascript:chgImg(1)" > Следующая  </a></td>
 	  </tr>
 	 </table>
 	</div>
@@ -143,10 +145,21 @@ function auto() {
 
 
 
-
-
-
-
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    $(document).ready(function(){
+//Скрыть PopUp при загрузке страницы    
+        PopUpHide();
+    });
+//Функция отображения PopUp
+    function PopUpShow(){
+        $("#popup1").show();
+    }
+//Функция скрытия PopUp
+    function PopUpHide(){
+        $("#popup1").hide();
+    }
+</script>
 
 
 
@@ -156,7 +169,7 @@ function auto() {
 	{% for article in articles %}
 	
 	  {% if article.visible == False %}
-	
+	   
 			  <li>
 					  <div>
 					  	<a href="{% url 'article_detail' pk=article.pk%}">{{ article.articleTitle }} <img src= {{article.imagePathBegin}} height="20%">  </a> 
@@ -166,7 +179,7 @@ function auto() {
 			        <form action="/siteVisit/addInBasket/{{article.pk}}/{{BaskAdd.pk}}/0/" method="post">
 			        {% csrf_token %}		   
 			       	   <div class="catalog-list-test"> 
-			       	     <price> Цена -  {{ article.price }} грн. </price> <a> <input  type = "image" <img src= "/media/basket_2.jpg" title="Добавить в корзину" width="44" height="46"></a>
+			       	      <a> <price> Цена -  {{ article.price }} грн. </price> </a>  <input  class ="catalogImage" type = "image" <img src= "/media/basket_2.jpg" title="Добавить в корзину" width="44" height="46">
 			       	   </div> 
 			       </form>	   
 			<!-- добавляем в корзину товар  -->				
@@ -188,7 +201,7 @@ function auto() {
 
 			    	</div> 
 			    	
-					  </a> 
+					 
 				</li>
 	   {% endif %}
 	{% endfor %} 

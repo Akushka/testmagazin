@@ -30,17 +30,21 @@
   Сумма - {{sum}} грн.
   </div>
 <br> 	
-	
-<div class="divZakaz">
-	<form action="/siteVisit/order/{{pk_bask}}/" method="post">
-	{% csrf_token %}
-	<p class="rightstrButton"> 
-		<br> 
-    <a>   <input type = "submit" class="button" value="Заказать!"> </a>
-	</p> 
-</form>
 
+
+	<div class="divZakaz">
+		<form action="/siteVisit/order/{{pk_bask}}/" method="post">
+		{% csrf_token %}
+		<p class="rightstrButton"> 
+			<br> 
+	    <a>   <input type = "submit" class="button" value="Заказать!"> </a>
+		</p> 
+	</form>
 </div>
+
+{%if sum != 0 %}	
+ 
+{% endif %}
 
 {% endblock content %} 
 

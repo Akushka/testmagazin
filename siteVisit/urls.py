@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^siteVisit/addInBasket/(?P<pk>[0-9]+)/(?P<pk_bask>[0-9]+)/(?P<index>[0-9]+)/$', views.addInBasket, name='addInBasket'),
     url(r'^siteVisit/InBasket/(?P<pk_bask>[0-9]+)/(?P<pk_del>[0-9]+)/$', views.InBasket, name='InBasket'),
     url(r'^siteVisit/order/(?P<pk_bask>[0-9]+)/$', views.order, name='order'),
+    url(r'^siteVisit/statik/$', views.CreateStatik, name='CreateStatik'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -33,7 +33,7 @@ class EditArticleForm(ModelForm):
     class Meta:
         model = SiteName
       #  fields = "__all__" 
-        fields = ['id','author','articleTitle','articleText','category','price','prevRecl','articleTextPreview','visible',]
+        fields = ['id','author','articleTitle','articleText','category','price','prevRecl','articleTextPreview','visible','viewed']
         
 
 class FindArtikleForm(ModelForm):

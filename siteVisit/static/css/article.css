@@ -29,6 +29,14 @@
   text-decoration: inherit; /* Убирает подчеркивание для ссылок */
 }
 
+.city{
+ font-size: 15;
+ float: right;
+ right: 50px;  /*Расстояние от правого края окна браузера */
+ border: 10px solid #fff;  Параметры рамки 
+ font-family: 'Titillium Web'
+}
+
 .userVal p, .userVal a{
 	position: fixed; /* Фиксированное положение */
 	right: 10px; /* Расстояние от правого края окна браузера */
@@ -125,12 +133,6 @@
     font-size: 20pt;
     /*border-bottom: 1px solid white ;*/
 }  
-.basketScreen {
-	     font-family: 'Muli';
-       color: #8c4707 ;
-       padding-left: 5;
-       font-size: 10pt;
-}
 
 .basket {
 	     font-family: 'Lobster&subset';
@@ -138,25 +140,13 @@
        padding-left: 15;
        font-size: 20pt;
 }
-.rightstrButton {
-	 /* position: fixed;
-    float: right;*/
-    padding-left: 3%;
-    font-size: 10pt;
-	  /*margin-top: 120; */
-}  
-.prevImage {
-	  /*position: fixed;*/
-	  padding-left: 3%;
-	  padding-right: 3%;
-}
 
 .rightButtonFind {
    /* text-align:  center;
     padding-right: 10px;*/
     margin-top: -325; 
     font-size: 10pt;
-	  padding-left: 40%;
+	  padding-left: 1%;
 }  
 
 .articleTitle a{
@@ -331,8 +321,36 @@ height: 1000px;*/
     border-bottom: 1px solid red;
 }
 .div_text{    
+    width: 90%; 
+    height: 4%; /* Ширина и высота */
+    display: inline-block;
     margin-left:5%;
+    background: white; /*Цвет фона */
+    padding: 0.1px; /* Поля вокруг текста */
+    border-radius: 7px; /* Уголки */
+    border: 1px solid #7a7b7e;
 }
+.div_text2 {
+    width: 90%; 
+    height: 30px; /* Ширина и высота */
+    display: inline-block;
+    margin-left:5%;
+    background:  #73EE3E; /*Цвет фона */
+    padding: 0.1px; /* Поля вокруг текста */
+    border-radius: 7px; /* Уголки */
+    border: 1px solid #7a7b7e;
+   }  
+.div_text:hover {
+	   width: 92%; 
+     height: 5%; /* Ширина и высота */
+     display: inline-block;
+     text-decoration: none; /* Убираем подчеркивание */
+     color: #fff; /* Цвет ссылки при наведении на нее курсора мыши */  
+     background: #73EE3E; /* Цвет фона */
+     font-size: 16pt;
+   }  
+
+   
 
 .div_prev{    
     width: 65%;
@@ -362,10 +380,10 @@ height: 1000px;*/
 
 .div3{ 
 	  /* position: fixed;*/    
-	 height: 50%;
+	  height: 50%;
     width: 15%;
     /*margin-right: 0.3%;*/
-    margin-top: -3%;
+    margin-top: -1%;
     margin-left: 84.7%;
     min-height: 300px;
     max-height: 300px;
@@ -381,7 +399,26 @@ height: 1000px;*/
     border-left: 1px solid red;
     border-bottom: 1px solid red;
 }
-
+.basketScreen {
+	     font-family: 'Muli';
+       color: #8c4707 ;
+       padding-left: 5;
+       font-size: 10pt;
+}
+.rightstrButton {
+	 /* position: fixed;
+    float: center;*/
+    padding-left: 3%;
+    font-size: 10pt;
+	  /*margin-top: 120; */
+}
+.rightBasketImage {
+    float: center;
+    padding-left: 20%;
+    margin-top: -20%;
+    font-size: 12pt;
+    /*opacity: 0.8;  полупрозрачный фон*/
+}
 .div_fon{ 
     opacity: 1;  /*полупрозрачный фон*/
 }
@@ -425,7 +462,63 @@ height: 1000px;*/
 	list-style: none;
 }
 
-.catalog-list-test a img {
-	width: 20%;
-	
+.catalog-list-test a img{
+	/*width: 20%;*/
+	width:44px;
+	height:46px;
 }
+.catalogImage a img{
+
+}
+.catalogImage:hover{
+	   
+     height: 6%; /* Ширина и высота */
+     width:25%;
+}
+
+.font_okno {
+    font-family: Areal;
+    color: #000;
+    float: right;
+    
+}
+.b-container{
+    width: 90%; 
+    height: 4%; /* Ширина и высота */
+    display: inline-block;
+    margin-left:5%;
+    background: #B4B4B4; /*Цвет фона */
+    padding: 0.1px; /* Поля вокруг текста */
+    border-radius: 7px; /* Уголки */
+    border: 1px solid #7a7b7e;
+}
+.b-popup{
+    width:100%;
+    min-height:100%;
+    /*z-index:9999999999999;*/
+    /*background-color: rgba(0,0,0,0.5);*/
+   /* overflow:hidden;*/
+    padding-right: 43%;
+    top: 12%;
+    position:fixed;
+}
+.b-popup .b-popup-content{
+	  /*float: right;*/
+    margin:30%;
+    width:300px;
+    height: 300px;
+    padding:10px;
+    background-color: #fff;
+    border-radius:5px;
+    box-shadow: 0px 0px 10px #000;
+}
+ 
+.prevImage {
+	  /*position: fixed;*/
+	  padding-left: 1%;
+	  padding-right: 1%;
+	  width: 90%;
+}
+
+
+

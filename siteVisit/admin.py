@@ -15,7 +15,7 @@ class ImageInArticle(admin.TabularInline):
     extra = 1    
     
 class SiteAdmin(admin.ModelAdmin):
-    fields = ('author', 'articleTitle','articleText','category','visible','price', 'prevRecl')
+    fields = ('author', 'articleTitle','articleText','category','visible','price', 'prevRecl','viewed')
     widgets = {'image':MultiFileInput}
     inlines = [ImageInArticle]
 
@@ -24,7 +24,7 @@ class ArrProduct(admin.TabularInline):
     extra = 0
             
 class SiteProduct(admin.ModelAdmin):
-    fields = ('clientName','Basket_ip_id','time_of_creation')
+    fields = ('clientName','Basket_ip_id','time_of_creation','statusBasket','produktOrder')
     inlines = [ArrProduct]
  
            

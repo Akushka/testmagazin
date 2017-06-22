@@ -1,0 +1,43 @@
+<h1>Статистика</h1>
+
+
+<h2>Товар</h2>
+{% for article in articles %}
+  <p> {{article.articleTitle}} , просмотров - {{article.viewed}} </p>
+{% endfor %} 
+
+
+<h2>Корзины</h2>
+<p> Всего корзин - {{basketArr.0}} </p>
+<p> Из них "Не использовалась" - {{basketArr.1}} </p>
+<p> Из них "Закрыт" - {{basketArr.2}} </p>
+<p> Из них "Не закрыт" - {{basketArr.3}} </p>
+  
+<h2>Купленные товары</h2>
+{% for ArticleOrder in arrArticleOrder %}
+  <p> {{ArticleOrder.articleTitle}}  </p>
+{% endfor %} 
+
+<h2>Товары, добавленные в корзину, но не купленные</h2>
+{% for ArticleNoOrder in arrArticleNoOrder %}
+  <p> {{ArticleNoOrder.articleTitle}}  </p>
+{% endfor %} 
+
+
+<h2> ID корзин -</h2>
+ {% for Basket in Baskets %}
+ {% if Basket.statusBasket == 'Закрыт'%}
+  <p> {{Basket.Basket_ip_id}} ,   Статус - {{Basket.statusBasket}},   Товары - 
+  	{% for ArticleOrder in arrArticleOrder %}
+       {{ArticleOrder.articleTitle}} ,
+    {% endfor %}
+  </p>
+ {%endif%} 
+ {% if Basket.statusBasket == 'Не закрыт'%}
+  <p> {{Basket.Basket_ip_id}},   Статус - {{Basket.statusBasket}},   Товары - 
+  {% for ArticleNoOrder in arrArticleNoOrder %}
+     {{ArticleNoOrder.articleTitle}} , 
+  {% endfor %}
+  </p>
+ {%endif%}  
+{% endfor %} 

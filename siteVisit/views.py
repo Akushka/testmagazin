@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 from django.shortcuts import render, get_object_or_404, render_to_response,\
-    redirect
+    redirect    
 from siteVisit.models import SiteName, CommentArticle, imageInArticle,ListOfCategories
 from siteVisit.models import Basket, ArrProduct
 from django.utils import timezone
@@ -21,18 +21,45 @@ import socket
 import datetime    
 from pip._vendor.requests.models import Response
 
+from ipware.ip import get_ip
+from django.contrib.gis.geoip2 import GeoIP2
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 
 
 def article_list(request, pk):
+    
+# вычисляем местоположение 
+    ip = get_ip(request)
+    #ip = '77.68.43.22'
+    if ip is not None:
+        g = GeoIP2()
+    try:
+        location = g.city(ip)
+    except:
+        location = 'нет данных'
+    else:
+        None
+        # какая-то логика
     
 #Если первый заход, то создаём корзину, иначе загружаем существующую
 #и проверяем, если есть корзины >6 часов, то удаляем их    
     Baskets = Basket.objects.all()
     
     for BaskAdd in Baskets:
-        timeDelta = datetime.datetime.strptime(str(datetime.datetime.now()), "%Y-%m-%d %H:%M:%S.%f") - datetime.datetime.strptime(BaskAdd.Basket_ip_id, "%Y-%m-%d %H:%M:%S.%f")
-        if timeDelta.seconds / 60  > 360:   #корзина сохраняеться шесть часов
-            BaskAdd.delete()
+        if (BaskAdd.statusBasket == 'Закрыт') and (BaskAdd.Basket_ip_id.find('temp')<0):   
+            BaskAdd.Basket_ip_id = 'temp'+BaskAdd.Basket_ip_id
+            BaskAdd.save()
+        try:    
+            timeDelta = BaskAdd.Basket_ip_id.split('(')
+            timeDelta = datetime.datetime.strptime(str(datetime.datetime.now()), "%Y-%m-%d %H:%M:%S.%f") - datetime.datetime.strptime(timeDelta[0].strip(), "%Y-%m-%d %H:%M:%S.%f")
+    #корзина сохраняеться шесть часов и если не использовалась, то удаляеться, иначе сохраняеться для стстистики (удаляеться потом вручную)        
+            if (timeDelta.seconds /60 > 360) and (BaskAdd.statusBasket == 'Не использовалась'):   
+                BaskAdd.delete()
+        except:
+            None
     
     Baskets = Basket.objects.all()    
     client = False
@@ -45,19 +72,28 @@ def article_list(request, pk):
             None   
     if client == False:
         BaskAdd = Basket()
-        BaskAdd.Basket_ip_id =  str(datetime.datetime.now())
+        if location != 'нет данных':
+            BaskAdd.Basket_ip_id =  str(datetime.datetime.now())+' ('+location['country_name']+' , '+location['city']+')'
+        if location == 'нет данных':
+            BaskAdd.Basket_ip_id =  str(datetime.datetime.now())+' ( ) '            
         BaskAdd.clientName = 'user'
+        BaskAdd.produktOrder = ''
+        BaskAdd.statusBasket = 'Не использовалась'
         BaskAdd.save()
         
         response = redirect('/')
         response.set_cookie( '1', BaskAdd.Basket_ip_id)
         return response
     
+    regionCity = BaskAdd.Basket_ip_id.split('(')
+    regionCity = regionCity[1].strip()[:-1]
+    sum = 0
     Products = ArrProduct.objects.filter(Basket_id = BaskAdd.pk) 
     arrProducts = []
     for Product in Products:
         try:
             arrProducts.append(SiteName.objects.get(pk=int(Product.Product)))
+            sum += arrProducts[len(arrProducts)-1].price
         except:
             None    
     
@@ -72,18 +108,20 @@ def article_list(request, pk):
    #админская часть
     if int(pk) == 999:
         Categories = ListOfCategories.objects.all()
+        pkCat = 0
         
-          
     filter = '' 
     if int(pk) != 999:
         Categories = ListOfCategories.objects.all()    
+
         pkCat = int(pk)
-        category = ListOfCategories.objects.get(Id_Categories = pkCat)  
+        category = ListOfCategories.objects.get(Id_Categories = pkCat)
         filter = category.Categories
+        
     #Если выбранно "всё", т.е. 0    
         if pkCat == 0:
             filter = ''
-   
+    
     #articles.imagePath = []
     args = {}
     args['article'] = []
@@ -123,16 +161,51 @@ def article_list(request, pk):
 # Проверяем и заполняем превьюшными (рекламными) картинками и текстом масив PrevArray
         if article.prevRecl == True:
             for image in images:
-                args['PrevArray'].append(image.imagePath.url)
+                image.imageUrlArticle = article.pk
+                args['PrevArray'].append(image)
+                
             
         #article.articleTextPreview = article.articleText[:100]
         if (article.articleText.lower().find(article.articleFindText.lower())>-1) & (article.tryCategory == True):
-            args['article'].append(article)    
+            args['article'].append(article)
+            
+    brouzer = request.META['HTTP_USER_AGENT']
+   # brouzer = get_user_agent(request)
+       
+    #args.update(csrf(request))
+    #args = RequestContext(request, {'args': args})
+        
     if int(pk) != 999:
-        return render(request, 'siteVisit/Article_list.html', {'timeDelta':timeDelta, 'form': args['form'],'userForm':args['userForm'], 'articles' : args['article'], 'countProduct':args['countProduct'], 'BaskAdd':args['BaskAdd'], 'arrProducts':args['arrProducts'], 'PrevArray': args['PrevArray'], 'Categories':Categories})
+        return render(request, 'siteVisit/Article_list.html', {'pkCat':pkCat+1, 
+                                                               'brouzer':brouzer, 
+                                                               'timeDelta':timeDelta, 
+                                                               'form': args['form'],
+                                                               'userForm':args['userForm'], 
+                                                               'articles' : args['article'], 
+                                                               'countProduct':args['countProduct'], 
+                                                               'BaskAdd':args['BaskAdd'], 
+                                                               'arrProducts':args['arrProducts'], 
+                                                               'PrevArray': args['PrevArray'], 
+                                                               'regionCity':regionCity,
+                                                               'Categories':Categories, 
+                                                               'sum':sum,
+                                                               })
     if int(pk) == 999:
-        return render(request, 'siteVisit/Article_list_admin.html', {'timeDelta':timeDelta, 'form': args['form'],'userForm':args['userForm'], 'articles' : args['article'], 'countProduct':args['countProduct'], 'BaskAdd':args['BaskAdd'], 'arrProducts':args['arrProducts'], 'PrevArray': args['PrevArray'], 'Categories':Categories})
-
+        return render(request, 'siteVisit/Article_list_admin.html', {'pkCat':pkCat+1, 
+                                                                     'timeDelta':timeDelta,
+                                                                     'form': args['form'],
+                                                                     'userForm':args['userForm'], 
+                                                                     'articles' : args['article'], 
+                                                                     'countProduct':args['countProduct'], 
+                                                                     'BaskAdd':args['BaskAdd'], 
+                                                                     'arrProducts':args['arrProducts'], 
+                                                                     'PrevArray': args['PrevArray'], 
+                                                                     'regionCity':regionCity,
+                                                                     'Categories':Categories,
+                                                                     'sum':sum, 
+                                                                     })
+     
+    
 # перенаправляем на сайт с фильтром  "на всё" (+ "/0")
 def article_list2(request):
     return redirect(article_list, 0)  
@@ -144,7 +217,20 @@ def autentificationUser(request):
     return render_to_response('siteVisit/test.html')
 
 def test(request):
-    return render_to_response('siteVisit/test.html')
+    #ip = get_ip(request)
+    ip = '109.68.43.22'
+    if ip is not None:
+        g = GeoIP2()
+    try:
+        location = g.city(ip)
+    except:
+        location = {'Локация': 'нет данных'}
+    else:
+        None
+        # какая-то логика
+        
+  
+    return render(request, 'siteVisit/test.html', {'ip':location})
 
 def article_detail(request, pk ):
     products = ArrProduct.objects.all()
@@ -159,7 +245,6 @@ def article_detail(request, pk ):
     Categories = ListOfCategories.objects.all()    
     
     args = {}
-   # args.update(csrf(request))
     args['article'] = SiteName.objects.get(id=pk)
     args['comments'] = CommentArticle.objects.filter(article_id = pk)
     args['form'] = comment_form
@@ -167,7 +252,10 @@ def article_detail(request, pk ):
     args['userForm'] = AutentificationUser
     args['countProduct'] = countProduct
     args['Categories'] = Categories
-    
+
+#Счётчик сколько раз вообще посмотрели товар    
+    args['article'].viewed += 1
+    args['article'].save()
 
     Baskets = Basket.objects.all()
     try:
@@ -178,7 +266,10 @@ def article_detail(request, pk ):
                 break
     except:
         None   
-            
+    
+    regionCity = BaskAdd.Basket_ip_id.split('(')
+    regionCity = regionCity[1].strip()[:-1]       
+    
     Products = ArrProduct.objects.filter(Basket_id = BaskAdd.pk)
         
     arrProducts = []
@@ -189,23 +280,20 @@ def article_detail(request, pk ):
             None
     args['arrProducts'] = arrProducts   
     
-   # STATIC_ROOT = os.path.abspath(os.path.dirname(__file__))
-    #args['article'].imagePath.append(args['article'].articleTitle+'_'+str(0)+'.jpg')
-    #for i in range(10):
-        #if os.path.isfile('siteVisit/static/media/'+args['article'].articleTitle+'_'+str(i)+'.jpg'):
-        #    args['article'].imagePath.append('media/'+args['article'].articleTitle+'_'+str(i)+'.jpg')
-    #    args['article'].imagePath.append('media/'+args['article'].articleTitle+'_'+str(i)+'.jpg')
-            
-#Для pythonanywhere ------------------           
-        #if os.path.isfile(os.path.join(STATIC_ROOT,'../static/media/'+args['article'].articleTitle+'_'+str(i)+'.jpg')):
-        #    args['article'].imagePath.append('\\media\\'+args['article'].articleTitle+'_'+str(i)+'.jpg')
-#Для pythonanywhere ------------------
-                    
-   # args['article'].imagePathBegin = 'media/'+args['article'].articleTitle+'_'+str(nomImage)+'.jpg'
     if len(args['images'])>0:
         args['article'].imagePathBegin = args['images'][0].imagePath
         
-    return render_to_response('siteVisit/Article_detail.html', args )
+  #  return render_to_response('siteVisit/Article_detail.html', args )
+    return render(request, 'siteVisit/Article_detail.html', {'article': args['article'], 
+                                                             'comments': args['comments'],
+                                                             'form': args['form'],
+                                                             'images': args['images'],
+                                                             'userForm': args['userForm'],
+                                                             'countProduct': args['countProduct'],
+                                                             'Categories': args['Categories'],
+                                                             'arrProducts': args['arrProducts'],
+                                                             'regionCity': regionCity,
+                                                             'BaskAdd': args['BaskAdd'] })
 
 def article_detail_admin(request, pk ):
     products = ArrProduct.objects.all()
@@ -250,23 +338,18 @@ def article_detail_admin(request, pk ):
             None    
     args['arrProducts'] = arrProducts   
     
-   # STATIC_ROOT = os.path.abspath(os.path.dirname(__file__))
-    #args['article'].imagePath.append(args['article'].articleTitle+'_'+str(0)+'.jpg')
-    #for i in range(10):
-        #if os.path.isfile('siteVisit/static/media/'+args['article'].articleTitle+'_'+str(i)+'.jpg'):
-        #    args['article'].imagePath.append('media/'+args['article'].articleTitle+'_'+str(i)+'.jpg')
-    #    args['article'].imagePath.append('media/'+args['article'].articleTitle+'_'+str(i)+'.jpg')
-            
-#Для pythonanywhere ------------------           
-        #if os.path.isfile(os.path.join(STATIC_ROOT,'../static/media/'+args['article'].articleTitle+'_'+str(i)+'.jpg')):
-        #    args['article'].imagePath.append('\\media\\'+args['article'].articleTitle+'_'+str(i)+'.jpg')
-#Для pythonanywhere ------------------
-                    
-   # args['article'].imagePathBegin = 'media/'+args['article'].articleTitle+'_'+str(nomImage)+'.jpg'
     if len(args['images'])>0:
         args['article'].imagePathBegin = args['images'][0].imagePath
         
-    return render_to_response('siteVisit/Article_detail_admin.html', args )
+    return render(request, 'siteVisit/Article_detail_admin.html', {'article': args['article'], 
+                                                             'comments': args['comments'],
+                                                             'form': args['form'],
+                                                             'images': args['images'],
+                                                             'userForm': args['userForm'],
+                                                             'countProduct': args['countProduct'],
+                                                             'Categories': args['Categories'],
+                                                             'arrProducts': args['arrProducts'],
+                                                             'BaskAdd': args['BaskAdd'] })
 
 def addcomment(request, pk):
     if request.user.is_authenticated():
@@ -306,6 +389,11 @@ def article_add(request):
 
 def addInBasket(request,pk, pk_bask, index):
     ArrProd = ArrProduct.objects.filter(Basket_id = pk_bask)
+
+    BaskAdd = Basket.objects.get(pk=pk_bask)
+    BaskAdd.statusBasket = 'Не закрыт'
+    BaskAdd.save()
+
     truProduct = False 
     for Product in ArrProd:
         if int(Product.Product) == int(pk):
@@ -325,6 +413,9 @@ def InBasket(request, pk_bask, pk_del):
     BaskAdd = Basket.objects.get(pk=pk_bask)
     arrProducts = []
     sum = 0
+#Город и регион    
+    regionCity = BaskAdd.Basket_ip_id.split('(')
+    regionCity = regionCity[1].strip()[:-1]
 #Загружаем категории
     Categories = ListOfCategories.objects.all()    
 
@@ -339,7 +430,12 @@ def InBasket(request, pk_bask, pk_del):
         except:
             None        
                 
-    return render(request, 'siteVisit/basket.html', {'sum':sum, 'arrProducts': arrProducts, 'pk_bask':pk_bask, 'Categories':Categories, 'BaskAdd':BaskAdd})
+    return render(request, 'siteVisit/basket.html', {'sum':sum, 
+                                                     'arrProducts': arrProducts, 
+                                                     'pk_bask':pk_bask, 
+                                                     'Categories':Categories,
+                                                     'regionCity':regionCity, 
+                                                     'BaskAdd':BaskAdd})
 
 def order(request, pk_bask):
     
@@ -349,6 +445,10 @@ def order(request, pk_bask):
     arrProducts = []
     sum = 0
     
+#Город и регион    
+    regionCity = BaskAdd.Basket_ip_id.split('(')
+    regionCity = regionCity[1].strip()[:-1]
+        
     Products = ArrProduct.objects.filter(Basket_id = pk_bask)
     for Product in Products:
         try:
@@ -368,12 +468,16 @@ def order(request, pk_bask):
             arrayOrder = arrayOrder +' , ' 
             for product in arrProducts:
                 arrayOrder = arrayOrder + ' , '+ product.articleTitle+' ( '+str(product.price)+' )'
+                BaskAdd.produktOrder +=  str(product.pk)+','
             arrayOrder = arrayOrder +' , '+ 'Общая цена - '+ str(sum) 
             recepients = ['anatoliy.kushka@tns-ua.com','mysiteadmkushka@gmail.com']
             
 #Очищаем корзину
             for Product in Products:
                 Product.delete()
+            
+            BaskAdd.statusBasket = 'Закрыт'
+            BaskAdd.save()    
         
             try:
                 send_mail('Покупка!!!', arrayOrder , 'mysiteadmkushka@gmail.com', recepients)
@@ -383,7 +487,13 @@ def order(request, pk_bask):
     else:
         form = sendOrder()
                 
-    return render(request, 'siteVisit/order.html', {'form':form,'sum':sum, 'arrProducts': arrProducts, 'pk_bask':pk_bask, 'Categories':Categories, 'BaskAdd':BaskAdd})
+    return render(request, 'siteVisit/order.html', {'form':form,
+                                                    'sum':sum, 
+                                                    'arrProducts': arrProducts, 
+                                                    'pk_bask':pk_bask, 
+                                                    'Categories':Categories,
+                                                    'regionCity':regionCity,  
+                                                    'BaskAdd':BaskAdd})
     
 def article_edit(request, pk):
     if pk != 999:
@@ -421,7 +531,11 @@ def article_edit(request, pk):
         formAddImage = AddImage()
    # form = EditArticleForm(instance=article)    
     Categories = ListOfCategories.objects.all()
-    return render(request, 'siteVisit/article_edit.html', {'form': form, 'formAddImage':formAddImage, 'arrImage': arrImage, 'article':article, 'Categories':Categories})
+    return render(request, 'siteVisit/article_edit.html', {'form': form, 
+                                                           'formAddImage':formAddImage, 
+                                                           'arrImage': arrImage, 
+                                                           'article':article, 
+                                                           'Categories':Categories})
 
 def delArticle(request, pk):
     if request.method == "POST":
@@ -449,8 +563,13 @@ def feedback(request):
                 BaskAdd = Bask
                 break
     except:
-        None 
+        None
+         
+#Город и регион    
+    regionCity = BaskAdd.Basket_ip_id.split('(')
+    regionCity = regionCity[1].strip()[:-1]
         
+   
     Products = ArrProduct.objects.filter(Basket_id = BaskAdd.pk)
         
     arrProducts = []
@@ -473,7 +592,82 @@ def feedback(request):
             return article_list(request, 0)
     else:
         form = Feedback()
-    return render(request, 'siteVisit/FeedBack.html', {'form': form, 'Categories':Categories, 'BaskAdd':BaskAdd, 'arrProducts':arrProducts})
+    return render(request, 'siteVisit/FeedBack.html', {'form': form, 
+                                                       'Categories':Categories, 
+                                                       'BaskAdd':BaskAdd,
+                                                       'regionCity':regionCity, 
+                                                       'arrProducts':arrProducts})
 
 
+def CreateStatik2(request):
+     
+    Baskets = Basket.objects.all()
+    articles = SiteName.objects.all()
+    
+    basketArr = [0,0,0,0]
+    basketArr[0] = len(Baskets)
+    
+    for Bask in Baskets:
+        None
+    
+    
+        
+    return render(request, 'siteVisit/CreateStatik.html', {'articles':articles, 'Baskets':Baskets, 'basketArr':basketArr})    
+     
+       
+    
+def CreateStatik(request):
+    
+    Baskets = Basket.objects.all()
+    articles = SiteName.objects.all()
+    
+    basketArr = [0,0,0,0]
+    basketArr[0] = len(Baskets)
+    arrArticleOrder = []
+    arrArticleNoOrder = []
+    for Bask in Baskets:
+        if Bask.statusBasket == "Не использовалась":
+            basketArr[1] += 1
+        if Bask.statusBasket == "Закрыт":
+            basketArr[2] += 1    
+            art = Bask.produktOrder[:-1]
+            arttest = art.split(',')
+            for OrderArt in arttest:
+                arrArticleOrder.append(SiteName.objects.get(pk = int(OrderArt)))
+        if Bask.statusBasket == "Не закрыт":
+            basketArr[3] += 1   
+
+            Products = ArrProduct.objects.filter(Basket_id = Bask.pk)
+            for Product in Products:
+                try:
+                    arrArticleNoOrder.append(SiteName.objects.get(pk=int(Product.Product)))
+                except:
+                    None
+            
+         
+      
+    return render(request, 'siteVisit/CreateStatik.html', {'articles':articles, 
+                                                           'Baskets':Baskets, 
+                                                           'basketArr':basketArr,
+                                                           'arrArticleOrder':arrArticleOrder,
+                                                           'arrArticleNoOrder':arrArticleNoOrder,
+                                                           
+                                                           })    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     

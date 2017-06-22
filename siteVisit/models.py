@@ -29,6 +29,7 @@ class SiteName(models.Model):
     imagePath = []
     imagePathBegin = models.ImageField(upload_to = 'image', blank=True, null=True)
     countComment = models.IntegerField(default=0)
+    viewed = models.IntegerField(default=0)
     #image = ImageField(upload_to='images/', null=True, blank=True)
     def publish(self):
         self.created_date = timezone.now()
@@ -36,7 +37,10 @@ class SiteName(models.Model):
     def __str__(self):
         return self.articleTitle
 
-    
+    def SetToZeroViewed(self):
+        self.viewed = 0
+        return self.viewed
+
     def image_img(self):
         if self.prevImage:
             return u'<a href="{0}" target="_blank"><img src="{0}" width="100"/></a>'.format(self.prevImage.url)
@@ -48,6 +52,7 @@ class SiteName(models.Model):
 class imageInArticle (models.Model):
     image_id = models.ForeignKey(SiteName)
     imagePath = models.ImageField(upload_to = 'image', blank=True, null=True)
+    imageUrlArticle = models.CharField(max_length=200)
     def image_img(self):
         if self.imagePath:
             return u'<a href="{0}" target="_blank"><img src="{0}" width="100"/></a>'.format(self.imagePath.url)
@@ -74,7 +79,11 @@ class CommentArticle(models.Model):
        
 class Basket(models.Model):
     clientName = models.CharField(max_length=200,verbose_name = "Покупатель", null=True)
-    Basket_ip_id = models.CharField(max_length=50, null=True)
+    Basket_ip_id = models.CharField(max_length=100, null=True)
+#Записываем статус - "Не использовалась", "Закрыт", "Не закрыт"    
+    statusBasket = models.CharField(max_length=20, null=True)
+#Для статистики купленные (добавленные) товары сохраняем сюда
+    produktOrder = models.CharField(max_length=100, null=True)
     time_of_creation = models.DateTimeField(
             default=timezone.now)
 

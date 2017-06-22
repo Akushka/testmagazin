@@ -32,11 +32,12 @@ function reloadPage()
 
 	 	
 <div class="PageTitle"> 
-	    
-    <a href="{% url 'article_list2'  %}"> Hi-Tech Mobile </a>
-
-
+	
+    <a href="{% url 'article_list2'  %}"> Hi-Tech Mobile   </a>  <span class="city"> <h5>Ваше местоположение:</h5> {{regionCity}}</span>
+    
 </div>  
+
+
 
 
 <!--	
@@ -56,15 +57,10 @@ function reloadPage()
 
 
 
-<br>
+
  <!--
 <p class="userVal2">  <a class="userVal">  Корзина <a href="/0"></a> <br>   <a href="/0"> <img src= "/media/basket.jpg" height="70" title="Корзина"></a>	</a>	 </p>  <br>    
   -->
-
- 
-
-    
-
     
 <body>	
 
@@ -72,24 +68,74 @@ function reloadPage()
 
 <div class="div1">
 {% for Categorie in Categories %}
- 	 <a class="div_text"> <a href="{% url 'article_list' pk=Categorie.Id_Categories %}">  {{Categorie}}          </a></a><br> 
+  
+  {% if Categorie.pk != pkCat %}
+ 	   <a class="div_text" href="{% url 'article_list' pk=Categorie.Id_Categories %}">  {{Categorie}}       </a><br> 
+ 	{% endif %}  
+ 	 
+ 	{% if Categorie.pk == pkCat %}
+ 	   <a class="div_text2" href="{% url 'article_list' pk=Categorie.Id_Categories %}">  {{Categorie}}       </a><br> 
+ 	{% endif %}
+ 	
 {% endfor %}
- <!--  <input type="button" value="reload" onclick="reloadPage()" />  -->   
-  <br> 
-  <br> 
-  <br>       
+
+<input type="button" value="reload" onclick="reloadPage()" />  <!---->   
+<p class = "rightstrPass">  <a href="{% url 'test'%}">  Test </a></p> 
+<a class="div_text2" href="{% url 'CreateStatik' %}">  Показать статистику       </a><br> 
 
 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
-<br> 
+
+<!-- Всплывающее окно  -->
+
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    $(document).ready(function(){
+//Скрыть PopUp при загрузке страницы    
+        PopUpHide();
+    });
+//Функция отображения PopUp
+    function PopUpShow(){
+        $("#popup1").show();
+    }
+//Функция скрытия PopUp
+    function PopUpHide(){
+        $("#popup1").hide();
+    }
+</script>
+
+<div class="b-container">
+    <a href="javascript:PopUpShow()">Доставка</a>
+</div>
+
+<div class="b-popup" id="popup1">
+    <div class="b-popup-content">
+    	<a class="font_okno" href="javascript:PopUpHide()"><img src= "/media/close.jpg"  width="25" height="25"></a>
+    	<br>
+        <span class="font_okno"> Доставка осуществляеться "из рук-в-руки" или "Новой почтой"
+        	<img src= "/media/delivery_2.jpg"  width="180" height="200">
+        	</span>
+    </div>
+</div>
+
+ <!--Всплывающее окно -->
+
+
+
+
+
  
+<br> 
+<br> 
+<br>       
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
+<br> 
  
 <hr> 
 
@@ -104,13 +150,17 @@ function reloadPage()
 	</p> 
 	</div> 
 </form>
-<br> <br><br> <br> 
+<br> 
+<br>
+<br> 
+<br> 
 
 <p class = "rightstrPass">  <a href="{% url 'feedback'%}">  Написать письмо  </a></p> 
 	
 </div>
 
 
+ 
 
 <div class="div3">
 	
@@ -127,22 +177,31 @@ function reloadPage()
   {% endfor %}
 <br>
 
+<!-- Если что то есть в корзине, то меняем картинку на наименование товара и показываем кнопку купить -->
+{%if sum != 0 %}	
 <form action="/siteVisit/InBasket/{{BaskAdd.pk}}/0/" method="post">
 	{% csrf_token %}
 	<p class="rightstrButton"> 
     <a>   <input type = "submit" class="button" value="Оформить заказ"> </a>
 	</p> 
 </form>
+{%endif%}
+
+<!-- Если в корзину ничего не добавили, то показываем пустую корзину -->
+{%if sum == 0 %}	
+<p class="rightBasketImage"> 
+   <span class="basketScreen"> Товаров в корзине нет( </span>
+   <img src= "/media/basket_3.png"  width="130" height="130"> 
+</p> 
+{%endif%}
 
 </div>
 
 
 
 <div class="div2">
-
-{% block content %}
-{% endblock %}
-
+  {% block content %}
+  {% endblock %}
 </div>
 
 
